@@ -27,7 +27,7 @@
     };
   };
 
-  networking.hostName = "MM-2103"; # Define your hostname.
+  networking.hostName = "MM-2103-work"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -158,7 +158,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    neovim
+    vim
     wget
     ansible
     ghostty
@@ -222,6 +222,7 @@
       icu
     ];
   };
+  programs.kdeconnect.enable = true;
 
   # XDG Desktop Portals for sandboxed app integration
   xdg.portal = {
@@ -267,9 +268,16 @@
     enableOnBoot = true;
   };
 
+  # Use nftables instead of iptables
+  networking.nftables.enable = true;
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 1714 1764 ];
+    allowedUDPPortRanges = [
+      { from = 1714; to = 1764; }  # Opens UDP 1714-1764 inclusive
+    ];
+  };
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
