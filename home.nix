@@ -14,6 +14,7 @@
   home.stateVersion = "25.05";
 
   home.packages = with pkgs; [
+    neovim
     lazygit
     lazydocker
     ansible-language-server
@@ -43,6 +44,7 @@
     cliphist
     go
     php
+    php84Packages.composer
     bun
     htop
     pamixer
@@ -82,6 +84,8 @@
     libreoffice-qt6-fresh
     gh
     ripgrep
+    youtube-music
+    unzip
   ];
 
   home.sessionVariables = {
