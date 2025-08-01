@@ -21,8 +21,8 @@
               home-manager.useUserPackages = true;
               home-manager.users.mm-2103 = ./home.nix;
 
-              # Optionally, use home-manager.extraSpecialArgs to pass
-              # arguments to home.nix
+              # Enable automatic backup of conflicting files
+              home-manager.backupFileExtension = "hm-backup";
             }
           ];
         };

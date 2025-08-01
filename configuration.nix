@@ -27,7 +27,7 @@
     };
   };
 
-  networking.hostName = "MM-2103-work"; # Define your hostname.
+  networking.hostName = "MM-2103"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -54,9 +54,13 @@
     LC_TELEPHONE = "nl_NL.UTF-8";
     LC_TIME = "nl_NL.UTF-8";
   };
-  
-  # Flakes
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+
+    # Increase download buffer to avoid overflow warnings (in bytes; 512MB here)
+    download-buffer-size = 512 * 1024 * 1024;
+  };
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
@@ -158,19 +162,17 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim
+    neovim
     wget
     ansible
     ghostty
-    hyprlock
-    hypridle
-    hyprpaper
-    hyprpicker
+    alacritty 
     xwayland-satellite
     wl-clipboard
     pinentry-curses
     sddm-astronaut
     kdePackages.qtmultimedia
+    nautilus
   ];
 
   # Fonts
@@ -222,30 +224,27 @@
       icu
     ];
   };
-  programs.kdeconnect.enable = true;
 
-  # XDG Desktop Portals for sandboxed app integration
   xdg.portal = {
-   enable = true;  # Core enablement - required for portals to work
-   wlr.enable = true;  # For wlroots-based WMs like Hyprland (safe to enable even if not using it yet)
-  
-   # Extra portal implementations (pick based on your needs; these cover most cases)
-   extraPortals = with pkgs; [
-     xdg-desktop-portal-gtk  
-     kdePackages.xdg-desktop-portal-kde
-     # xdg-desktop-portal-wlr  # Uncomment if using Hyprland/Sway (wlroots); it's lightweight
-     # xdg-desktop-portal-hyprland  # Uncomment if fully switching to Hyprland
-   ];
-  
-   # Default config: Prioritize KDE for your Plasma setup, with GTK fallback
-   config = {
-     common = {
-       default = [ "kde" "gtk" ];  # KDE first (matches your DE), then GTK for compatibility
-     };
-   };
-  
-   # Optional: Per-interface config (e.g., force GTK for file choosers if KDE acts up)
-   # config.common."org.freedesktop.portal.FileChooser" = [ "gtk" ];
+    enable = true;
+    wlr.enable = true;  # Still needed for wlroots-specific features (e.g., screencast in Niri)
+
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gnome
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-wlr
+      kdePackages.xdg-desktop-portal-kde
+    ];
+
+    config = {
+      kde.default = [ "kde" ];
+
+      common.default = [
+        "gnome"
+        "wlr"
+        "gtk"
+      ];
+    };
   };
 
   # List services that you want to enable:
@@ -260,6 +259,8 @@
     settings = {
       USB_AUTOSUSPEND=0;
       RUNTIME_PM_ENABLE="01:00.0";
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
     };
   };
 
@@ -268,16 +269,9 @@
     enableOnBoot = true;
   };
 
-  # Use nftables instead of iptables
-  networking.nftables.enable = true;
   # Open ports in the firewall.
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [ 1714 1764 ];
-    allowedUDPPortRanges = [
-      { from = 1714; to = 1764; }  # Opens UDP 1714-1764 inclusive
-    ];
-  };
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
