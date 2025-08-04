@@ -107,11 +107,8 @@
     };
     ly = {
       enable = false;
-      # Optional customizations (tweak as needed)
       settings = {
-        animation = "none";  # Fun login animation (options: none, matrix, etc.)
-        blank_password = false;  # Don't allow empty passwords
-        tty = 2;  # Run on TTY2 (default; change if conflicting)
+        animation = "doom";
       };
     };
   };
@@ -173,6 +170,11 @@
     sddm-astronaut
     kdePackages.qtmultimedia
     nautilus
+    wineWowPackages.waylandFull
+    wineWowPackages.staging
+    winetricks
+    libgcc
+    gcc
   ];
 
   # Fonts
@@ -209,7 +211,7 @@
     enable = true;
     waylandCompositors = {
       niri = {
-        prettyName = "Niri";
+        prettyName = "Niri-UWSM";
         comment = "Niri compositor managed by UWSM";
         binPath = "/run/current-system/sw/bin/niri-session";
       };
