@@ -89,6 +89,13 @@
     hypridle
     hyprpaper
     hyprpicker
+    hyprsunset
+    tor-browser
+    librewolf
+    lutris
+    calibre
+    rocmPackages.llvm.clang-tools
+    obs-studio
   ];
 
   home.sessionVariables = {
@@ -230,5 +237,10 @@
     };
     mako.enable = true;
     polkit-gnome.enable = true;
+    wlsunset = {
+      enable = true;
+      sunrise = "7:00";
+      sunset = "23:00";
+    };
   };
 }
